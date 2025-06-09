@@ -1,108 +1,166 @@
 import os
-import sys
 
-idea = sys.argv[1]
-slug = idea.lower().replace(" ", "-")
+IDEA = "AI-based diet tracker app"
+SLUG = IDEA.lower().replace(" ", "-")
 
-print(f"📁 Creating project for: {idea} → {slug}")
+print(f"\n🚀 Generating project: {SLUG}\n")
 
 folders = [
-    f"{slug}/public",
-    f"{slug}/src",
+    f"{SLUG}/public",
+    f"{SLUG}/src/components",
+    f"{SLUG}/src/layout",
+    f"{SLUG}/src/pages",
+    f"{SLUG}/src/lib"
 ]
 
+for folder in folders:
+    os.makedirs(folder, exist_ok=True)
+
 files = {
-    f"{slug}/package.json": f"""{{
-  "name": "{slug}",
-  "version": "0.0.1",
+    f"{SLUG}/package.json": f"""{{
+  "name": "{SLUG}",
+  "version": "1.0.0",
   "scripts": {{
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
   }},
   "dependencies": {{
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }},
   "devDependencies": {{
-    "vite": "^4.0.0",
-    "tailwindcss": "^3.0.0",
-    "postcss": "^8.0.0",
-    "autoprefixer": "^10.0.0"
+    "vite": "^4.4.9",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.21",
+    "autoprefixer": "^10.4.14"
   }}
 }}""",
 
-    f"{slug}/vite.config.js": f"""import {{ defineConfig }} from 'vite';
+    f"{SLUG}/vite.config.js": """import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({{
+export default defineConfig({
   plugins: [react()],
-}});
-""",
+});""",
 
-    f"{slug}/tailwind.config.js": """module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: { extend: {} },
+    f"{SLUG}/tailwind.config.js": """module.exports = {
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
+  theme: {
+    extend: {},
+  },
   plugins: [],
-};
-""",
+};""",
 
-    f"{slug}/postcss.config.js": """module.exports = {
+    f"{SLUG}/postcss.config.js": """module.exports = {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
   },
-};
-""",
+};""",
 
-    f"{slug}/index.html": f"""<!DOCTYPE html>
-<html lang="en">
+    f"{SLUG}/index.html": f"""<!DOCTYPE html>
+<html lang=\"en\">
   <head>
-    <meta charset="UTF-8" />
-    <title>{idea}</title>
+    <meta charset=\"UTF-8\" />
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
+    <title>{IDEA}</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div id=\"root\"></div>
+    <script type=\"module\" src=\"/src/main.jsx\"></script>
   </body>
 </html>""",
 
-    f"{slug}/src/main.jsx": """import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
+    f"{SLUG}/src/index.css": """@tailwind base;
+@tailwind components;
+@tailwind utilities;""",
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+    f"{SLUG}/src/main.jsx": """import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );""",
 
-    f"{slug}/src/index.css": """@tailwind base;
-@tailwind components;
-@tailwind utilities;
-""",
+    f"{SLUG}/src/App.jsx": """import AppLayout from './layout/AppLayout';
+import Home from './pages/Home';
 
-    f"{slug}/src/App.jsx": f"""function App() {{
+function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center text-2xl text-center p-6">
-      🚀 {idea}
+    <AppLayout>
+      <Home />
+    </AppLayout>
+  );
+}
+export default App;""",
+
+    f"{SLUG}/src/layout/AppLayout.jsx": """import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+
+const AppLayout = ({ children }) => {
+  return (
+    <div className='flex flex-col min-h-screen'>
+      <Navbar />
+      <main className='flex-1 p-4'>{children}</main>
+      <Footer />
     </div>
   );
-}}
-export default App;
-""",
+};
 
-    f"{slug}/README.md": f"# {idea}\n\nAuto-generated React + Tailwind project. Ready to deploy on Vercel.",
+export default AppLayout;""",
+
+    f"{SLUG}/src/components/Navbar.jsx": """const Navbar = () => (
+  <nav className='bg-blue-600 text-white p-4'>
+    <h1 className='text-xl font-bold'>AI Diet Tracker</h1>
+  </nav>
+);
+export default Navbar;""",
+
+    f"{SLUG}/src/components/Footer.jsx": """const Footer = () => (
+  <footer className='bg-gray-800 text-white text-center p-2'>
+    <p>© 2025 AI Diet Tracker</p>
+  </footer>
+);
+export default Footer;""",
+
+    f"{SLUG}/src/pages/Home.jsx": f"""const Home = () => (
+  <div className='text-center'>
+    <h2 className='text-2xl font-bold mb-4'>Welcome to {IDEA}</h2>
+    <p className='text-gray-600'>Track your nutrition with AI insights.</p>
+  </div>
+);
+export default Home;""",
+
+    f"{SLUG}/src/lib/api.js": """// Example placeholder for API logic
+export const fetchData = async () => {
+  return {{ status: 'ok', data: [] }};
+};""",
+
+    f"{SLUG}/README.md": f"""# {IDEA}
+
+🚀 Auto-generated polished web app using React + Tailwind.
+
+## Features
+- Layout with Navbar + Footer
+- Component structure
+- Page routing ready
+- Tailwind integrated
+- Ready for Vercel
+
+## Run locally
+```bash
+npm install
+npm run dev
+```"""
 }
 
-# Create folders
-for folder in folders:
-    os.makedirs(folder, exist_ok=True)
-
-# Create files
 for path, content in files.items():
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
 
-print(f"✅ Done! App generated in folder: {slug}")
+print(f"\n✅ Project generated in: {SLUG}/")
