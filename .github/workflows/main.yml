@@ -1,4 +1,4 @@
-name: Auto Generate Web App
+name: Generate Pro Web App
 
 on:
   workflow_dispatch:
@@ -6,29 +6,31 @@ on:
       idea:
         description: "Enter your web app idea"
         required: true
-        default: "AI powered resume screener"
+        default: "AI-based diet tracker app"
 
 jobs:
-  build:
+  generate:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📦 Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
+      - name: 🐍 Set Up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.x"
+          python-version: '3.x'
 
-      - name: Run generator script
+      - name: 📂 Generate App Structure
         run: |
-          python scripts/generate_webapp.py "${{ github.event.inputs.idea }}"
+          mkdir -p scripts
+          echo "${{ github.event.inputs.idea }}" > scripts/idea.txt
+          python scripts/generate_pro_webapp.py "${{ github.event.inputs.idea }}"
 
-      - name: Commit and push generated app
+      - name: ✅ Commit and Push Changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "⚡ Auto-generated app for: ${{ github.event.inputs.idea }}" || echo "No changes to commit"
+          git commit -m "🚀 Generated app: ${{ github.event.inputs.idea }}" || echo "No changes to commit"
           git push
